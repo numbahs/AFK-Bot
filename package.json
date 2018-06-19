@@ -1,0 +1,24 @@
+{
+  "name": "afk_bot",
+  "description": "\"A discord bot that moves to afk and allows for a message to attach to your status of being AFK. \"",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/numbahs/AFK-Bot.git"
+  },
+  "author": "Albert Tang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/numbahs/AFK-Bot/issues"
+  },
+  "homepage": "https://github.com/numbahs/AFK-Bot#readme",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "fs-extra": "^6.0.1"
+  }
+}
