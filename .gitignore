@@ -1,2 +1,3 @@
 node_modules/*
-discordToken.txt
+discordToken.json
+package-lock.json

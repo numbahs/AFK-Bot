@@ -6,7 +6,7 @@
 const fs = require("fs-extra");
 const start = new Date(); // credit to Adam Gincel, using to ignore old messages
 const discord = require("discord.js");
-const tokenFile = './discordToken.txt';
+const { token } = require('./discordToken.json');
 
 async function updateUsers(username, author, message, afkUsers) {
   afkUsers[username] = [author, message];
@@ -51,11 +51,10 @@ async function handleMessage(msg, afkUsers) {
 
 async function main() { 
   let discordBot = new discord.Client();
-	const token = (await fs.readFile(tokenFile, "utf8")).replace('\n','');
   let afkUsers = {};
 
 	console.log("Logging in");
-	await discordBot.login(token);
+	await discordBot.login(token.toString('utf8'));
 	console.log("Logged in");
 	discordBot.on("message", async msg => {
     await handleMessage(msg, afkUsers);
