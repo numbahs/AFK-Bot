@@ -10,36 +10,38 @@ const tokenFile = './discordToken.txt';
 
 async function updateUsers(username, author, message, afkUsers) {
   afkUsers[username] = [author, message];
-  console.log(afkUsers);
 }
 
-async function deleteUser(oldUsr, afkUsers) {
-	if(afkUsers[oldUsr.user.username]) {
-		delete afkUsers[oldUsr.user.username];
-	}
+async function deleteUser(username, afkUsers) {
+  console.log(`${username} is no longer AFK`);
+	delete afkUsers[username];
 }
 
 async function checkAFKs(msg, afkUsers) {
   console.log(`Checking for usernames`);
-  console.log(afkUsers);
 	for(let username in afkUsers) {
     console.log(`Checking ${username}`);
     let afkUser = afkUsers[username];
 		if(msg.isMemberMentioned(afkUser[0])) {
 			await msg.channel.send(`${username}: ${afkUser[1]}`);
-      console.log(`Sent msg ${afkUser[1]}`);
+      console.log(`Sent afk message for ${username}`);
   	}
   }
 }
 
 async function handleMessage(msg, afkUsers) {
   const content = msg.content;
-	const argsAFK = [content.slice(0, 4), content.slice(5, content.length)];
-	if(argsAFK[0] === "/afk" && new Date(msg.createdTimestamp) > start) {
+	const argsAFK = [content.slice(0, 4), content.slice(5), content.slice(4)];
+	if(argsAFK[0] === "/afk") {
 		await msg.member.setVoiceChannel(msg.guild.afkChannel);
     console.log(`Moving ${msg.author.username}`);
-    await updateUsers(msg.author.username, msg.author, argsAFK[1], afkUsers);
-    console.log(afkUsers);
+    let afkMsg = "";
+    if(parseInt(argsAFK[2])) {
+      afkMsg = `AFK for ${parseInt(argsAFK[2])} minutes from ${msg.createdAt}`;
+    } else {
+      afkMsg = argsAFK[1];
+    }
+    await updateUsers(msg.author.username, msg.author, afkMsg, afkUsers);
     console.log(`Added ${msg.author.username} to list`);
 	} else {
     await checkAFKs(msg, afkUsers);
@@ -60,8 +62,8 @@ async function main() {
 	});
 	
 	discordBot.on("voiceStateUpdate", async (oldUsr, newUsr) => {
-    if(oldUsr.voiceChannel && oldUsr.guild.afkChannel === oldUsr.voiceChannel) {
-      await deleteUser(oldUsr, afkUsers);
+    if(newUsr.guild.afkChannel !== newUsr.voiceChannel && afkUsers[oldUsr.user.username]) {
+      await deleteUser(oldUsr.user.username, afkUsers);
     }
 	});
 }
