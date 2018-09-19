@@ -3,7 +3,6 @@
  * Albert Tang - 6/18/2018
  */
 
-const fs = require("fs-extra");
 const start = new Date(); // credit to Adam Gincel, using to ignore old messages
 const discord = require("discord.js");
 const { token } = require('./discordToken.json');
