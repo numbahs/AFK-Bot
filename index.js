@@ -64,6 +64,10 @@ async function main() {
       await deleteUser(oldUsr.user.username, afkUsers);
     }
 	});
+
+	discordBot.on("error", (e) => {
+		console.error(e);
+	});
 }
 
 main().catch((err) => { console.error(err); });
